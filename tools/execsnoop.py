@@ -61,6 +61,8 @@ parser.add_argument("-l", "--line",
     help="only print commands where arg contains this line (regex)")
 parser.add_argument("--max-args", default="20",
     help="maximum number of arguments parsed and displayed, defaults to 20")
+parser.add_argument("-V", "--version", action="store_true",
+    help="show version information and exit")
 parser.add_argument("--ebpf", action="store_true",
     help=argparse.SUPPRESS)
 args = parser.parse_args()
@@ -180,6 +182,11 @@ int do_ret_sys_execve(struct pt_regs *ctx)
     return 0;
 }
 """
+
+if args.version:
+    from bcc import version
+    print(version.__version__)
+    exit()
 
 bpf_text = bpf_text.replace("MAXARG", args.max_args)
 if args.cgroupmap:
